@@ -29,7 +29,9 @@ def build_index():
         client.delete_collection(COLLECTION_NAME)
     except Exception:
         pass
-    collection = client.create_collection(COLLECTION_NAME)
+    collection = client.create_collection(
+    COLLECTION_NAME, metadata={"hnsw:space": "cosine"}
+)
 
     texts = [c["texte"] for c in chunks]
     ids = [c["chunk_id"] for c in chunks]
