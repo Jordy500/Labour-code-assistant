@@ -6,3 +6,6 @@ venv/
 chroma_db/
 data/raw_html/
 .DS_Store
+chunks_code_travail.json
+articles_code_travail.json
+LEGITEXT000006072050.json
