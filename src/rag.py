@@ -8,19 +8,10 @@ from vector_db import VectorDB
 
 load_dotenv()
 
+PROMPTS_DIR = os.path.join(os.path.dirname(__file__), "..", "prompts")
 
-PROMPT_TEMPLATE = """Tu es un assistant juridique spécialisé dans le droit du travail français.
-Réponds à la question en te basant UNIQUEMENT sur les extraits du Code du travail fournis ci-dessous.
-Si les extraits ne permettent pas de répondre, dis-le clairement plutôt que d'inventer une réponse.
-Cite toujours le(s) numéro(s) d'article sur lesquels tu t'appuies.
-
-Extraits du Code du travail :
-{contexte}
-
-Question : {question}
-
-Réponse :"""
-
+with open(os.path.join(PROMPTS_DIR, "rag_system_prompt.txt"), encoding="utf-8") as f:
+    PROMPT_TEMPLATE = f.read().strip()
 
 class RAG:
     def __init__(self):
@@ -38,14 +29,8 @@ class RAG:
             messages=[{"role": "user", "content": prompt}],
             temperature=0.2,
         )
-        return response.choices[0].message.content, hits
+        return response.choices[0].message.content, hits, contexte
 
 
 if __name__ == "__main__":
     rag = RAG()
-    question = "Quelle est la durée légale de la période d'essai ?"
-    reponse, sources = rag.answer(question)
-
-    print(f"Question : {question}\n")
-    print(f"Réponse :\n{reponse}\n")
-    print("Sources utilisées :", ", ".join(h["num"] for h in sources))
