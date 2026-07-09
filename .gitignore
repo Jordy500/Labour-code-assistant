@@ -10,3 +10,5 @@ articles_code_travail.json
 chunks_code_travail.json
 LEGITEXT000006072050.json
 *.json
+data/
+legi-data/
