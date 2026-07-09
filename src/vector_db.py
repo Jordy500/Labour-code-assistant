@@ -10,7 +10,6 @@ CHROMA_DB_PATH = "chroma_db"
 COLLECTION_NAME = "code_travail"
 BATCH_SIZE = 64
 
-
 class VectorDB:
     def __init__(self):
         self.client = chromadb.PersistentClient(path=CHROMA_DB_PATH)
