@@ -13,8 +13,13 @@ BATCH_SIZE = 64
 
 class VectorDB:
     def __init__(self):
-        self.model = SentenceTransformer(EMBEDDING_MODEL_NAME)
         self.client = chromadb.PersistentClient(path=CHROMA_DB_PATH)
+        collection = self._get_or_none()
+        if collection is not None:
+            model_name = collection.metadata.get("embedding_model", EMBEDDING_MODEL_NAME)
+        else:
+            model_name = EMBEDDING_MODEL_NAME
+        self.model = SentenceTransformer(model_name)
 
     def _get_or_none(self):
         try:
@@ -32,7 +37,8 @@ class VectorDB:
         except Exception:
             pass
         collection = self.client.create_collection(
-            COLLECTION_NAME, metadata={"hnsw:space": "cosine"}
+    COLLECTION_NAME,
+    metadata={"hnsw:space": "cosine", "embedding_model": EMBEDDING_MODEL_NAME},
         )
 
         texts = [c["texte"] for c in chunks]

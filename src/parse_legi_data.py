@@ -54,10 +54,21 @@ def chunk_text(texte, size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
         chunks.append(" ".join(current))
 
     return chunks
+
+def build_chunks(articles):
+    chunks = []
+    for article in articles:
+        pieces = chunk_text(article["texte"])
+        for i, piece in enumerate(pieces):
+            chunks.append(
+                {
+                    "chunk_id": f"{article['id']}_{i}",
+                    "num": article["num"],
+                    "article_id": article["id"],
+                    "chunk_index": i,
+                    "texte": piece,
+                }
+            )
+    return chunks
 if __name__ == "__main__":
     articles = extract_articles()
-    print(f"{len(articles)} articles extraits")
-
-    with open("articles_code_travail.json", "w", encoding="utf-8") as f:
-        json.dump(articles, f, ensure_ascii=False, indent=2)
-    print("articles_code_travail.json stocké")
